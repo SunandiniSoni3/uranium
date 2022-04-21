@@ -5,6 +5,8 @@ const UserController= require("../controllers/userController")
 //const BookController= require("../controllers/bookController")
 
 
+
+
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
@@ -50,6 +52,15 @@ router.post('/create-a-user', UserController.createAUser)
 // router.get("/basicRoute3", commonMW.mid2, UserController.basicCode3)
 // router.get("/basicRoute4", commonMW.mid1, commonMW.mid4, UserController.basicCode4)
 
+
+// ====================================================================================================================
+const commonMid =require("../middlewares/commonMiddlewares")
+const allcontroller =require("../controllers/allController")
+
+
+router.post("/usreDocument",commonMid.mid1 ,allcontroller.createUser)
+router.post("/productDocument", allcontroller.createProduct)
+router.post("/orderDocument",commonMid.mid1 , allcontroller.createOrder)
 
 
 
