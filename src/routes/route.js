@@ -60,7 +60,7 @@ const allcontroller =require("../controllers/allController")
 
 router.post("/usreDocument",commonMid.mid1 ,allcontroller.createUser)
 router.post("/productDocument", allcontroller.createProduct)
-router.post("/orderDocument",commonMid.mid1 , allcontroller.createOrder)
+router.post("/orderDocument",commonMid.mid2,commonMid.mid1 , allcontroller.createOrder)
 
 
 

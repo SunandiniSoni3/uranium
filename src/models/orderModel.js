@@ -17,8 +17,8 @@ const orderSchema = new mongoose.Schema( {
 	amount: Number,
 	isFreeAppUser: Boolean, 
     date: {
-        type: Date,
-         default:Date.now()
+        type: String,
+         default:moment().format("DD/MM/YYYY")
         //  .format("DD/MM/YYYY")
     }
 }, { timestamps: true });
