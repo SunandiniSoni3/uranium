@@ -19,7 +19,7 @@ const createAuthor = async (req, res) => {
         if(!fname)  return res.status(400).send({ status:false, msg: "first name must be present" });
         // if(typeof fname !== "string"||fname.trim().length ===0) return res.status(400).send({ status:false, msg: "fname should be string" });
         // data.fname = data.fname.trim()
-        let name =/^[a-zA-z]{2,30}$/.test(fname)
+        let name =/^[a-zA-Z]{2,30}$/.test(fname)
         if(!name) return res.status(400).send({status:false,msg:"enter valid first name "})
 
         
@@ -28,7 +28,7 @@ const createAuthor = async (req, res) => {
         if(!lname)  return res.status(400).send({ status:false, msg: "Last name must be present" });
         // if(typeof lname !== "string"||lname.trim().length ===0) return res.status(400).send({ status:false, msg: "Lname should be string" });
         // data.lname=data.lname.trim()
-        let lame =/^[a-zA-z]{2,30}$/.test(lname)
+        let lame =/^[a-zA-Z]{2,30}$/.test(lname)
         if(!name) return res.status(400).send({status:false,msg:"enter valid first name "})
 
         // title validation
