@@ -1,6 +1,16 @@
 const collegeModel = require("../models/collegeModel")
 
 const internModel = require("../models/internModel")
+const isValidReq = function(value) {
+    return Object.keys(value).length > 0
+}
+
+const isValid = (value) => {
+    if (typeof value == 'undefined' || typeof value == null) return false;
+    if (typeof value == 'string' && value.trim().length == 0) return false;
+    return true
+
+}
 
 
 const postIntern = async(req, res) => {
@@ -12,13 +22,13 @@ const postIntern = async(req, res) => {
         if (!isValidReq(data)) {
             return res.status(400).send({ status: false, message: "please provide intern details" })
         }
-        //***************full name including no.s plz check */ 
+        
 
         // collegeName validation
         if (!isValid(collegeName)) {
-            return res.status(400).send({ status: false, message: "please enter valid college name " })
+            return res.status(400).send({ status: false, message: "please enter college name " })
         }
-        if (!/^[a-zA-z]{2,10}$/.test(collegeName)) {
+        if (!/^[a-zA-Z.-]+$/.test(collegeName)) {
             return res.status(400).send({ status: false, message: "please enter valid college name " })
         }
 
@@ -39,15 +49,19 @@ const postIntern = async(req, res) => {
 
         // name validation
         if (!isValid(name)) {
-            return res.status(400).send({ status: false, message: "please enter valid college name " })
+            return res.status(400).send({ status: false, message: "please enter intern name" })
         }
+        if(!/^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/.test(name)){
+            return res.status(400).send({status: false, message: "please enter valid intern name" })
+        }
+
 
 
         //   mobile validation
         if (!isValid(mobile)) {
             return res.status(400).send({ status: false, message: "please enter mobile no. " })
         }
-        if (!/^[0-9]{10}$/.test(mobile)) {
+        if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile)) {
             return res.status(400).send({ status: false, message: "please enter valid 10 digit mobile no. " })
         }
         let mobileCheck = await internModel.findOne({ mobile: mobile })

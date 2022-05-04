@@ -107,3 +107,6 @@ College details
   }
 }
 https://github.com/rohitsch1/projectnew.git
+ let fullNameRegEx = /^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/
+ mobile regex /^(\+\d{1,3}[- ]?)?\d{10}$/
+ college short name regex /^[a-zA-Z.-]+$/
