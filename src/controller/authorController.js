@@ -17,8 +17,7 @@ const createAuthor = async (req, res) => {
         // Fname validation
         console.log(typeof fname)
         if(!fname)  return res.status(400).send({ status:false, msg: "first name must be present" });
-        // if(typeof fname !== "string"||fname.trim().length ===0) return res.status(400).send({ status:false, msg: "fname should be string" });
-        // data.fname = data.fname.trim()
+        
         let name =/^[a-zA-Z]{2,30}$/.test(fname)
         if(!name) return res.status(400).send({status:false,msg:"enter valid first name "})
 
@@ -26,8 +25,7 @@ const createAuthor = async (req, res) => {
 
         // lname validation
         if(!lname)  return res.status(400).send({ status:false, msg: "Last name must be present" });
-        // if(typeof lname !== "string"||lname.trim().length ===0) return res.status(400).send({ status:false, msg: "Lname should be string" });
-        // data.lname=data.lname.trim()
+        
         let lame =/^[a-zA-Z]{2,30}$/.test(lname)
         if(!name) return res.status(400).send({status:false,msg:"enter valid first name "})
 
@@ -41,8 +39,8 @@ const createAuthor = async (req, res) => {
             return res.status(400).send({ status:false, msg: "email must be present" });
         }
         
-        let regx = /^([a-zA-Z0-9\._]+)@([a-zA-Z])+\.([a-z]+)(.[a-z])?$/
-        // rege=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        let regx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+       
         let x = regx.test(email)
         if(!x) {
             return res.status(400).send({status:false,msg:"write the correct format for email"})

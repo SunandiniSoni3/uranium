@@ -81,7 +81,7 @@ const createBlogs = async function(req, res) {
         }
 
         // tags validation
-        // if(typeof tags =="string") return res.status(400).send({})
+       
         if(tags||typeof tags =="string"){
             
             if(!Array.isArray(tags)) return res.status(400).send({status:false,msg:"tags should be  array"})  
