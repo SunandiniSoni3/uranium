@@ -85,16 +85,10 @@ const postIntern = async(req, res) => {
         // create intern
         let createIntern = await internModel.create(document)
 
-        var { isDeleted,name:name2,email:email1,mobile:mobile1,collegeId}=createIntern
+       
       
         return res.status(201)
-        .send({
-            isDeleted:isDeleted,
-            name:name2,
-            email:email1,
-            mobile:mobile1,
-            collegeId:collegeId
-        })
+        .send({ status: true,data: createIntern})
 
     } catch (err) {
         return res.status(500).send({ status: "error", message: err.message })

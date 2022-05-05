@@ -64,14 +64,8 @@ const postCollege = async (req, res) => {
         //  document creation
         let create = await collegeModel.create(data)
 
-        var { name: Name, fullname, logoLink: logoL, isDeleted: isDeleted1 } = create
-        return res.status(201)
-            .send({
-                name: Name,
-                fullName: fullName,
-                logoLink: logoL,
-                isDeleted: isDeleted1
-            })
+       
+        return res.status(201) .send({ status: true,data: create})
 
 
     } 
