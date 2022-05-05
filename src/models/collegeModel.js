@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
 const collegeSchema = new mongoose.Schema({
+      
+   
     name: {
         type: String,
         trim: true,
@@ -14,16 +16,15 @@ const collegeSchema = new mongoose.Schema({
     },
     logoLink: {
         type: String,
-        default: "https://functionup.s3.ap-south-1.amazonaws.com/colleges/iith.png"
+        required:true
+        
     },
-    isdeleted: {
+    isDeleted: {
         type: Boolean,
         default: false
     }
 
-    //      name: { mandatory, unique, example iith}, 
-    // fullName: {mandatory, example `Indian Institute of Technology, Hyderabad`}, 
-    // logoLink: {mandatory}, isDeleted: {boolean, default: false} 
+    
 }, { timestamps: true })
 
 module.exports = mongoose.model('college', collegeSchema)

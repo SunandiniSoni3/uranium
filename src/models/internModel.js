@@ -13,12 +13,12 @@ const internSchema = new mongoose.Schema({
         trim: true,
         required: true,
         unique: true,
-        ////
+        
     },
     mobile: {
         type: String,
         unique: true,
-        ////
+       required:true
     },
     collegeId: {
         type: id,
@@ -30,10 +30,7 @@ const internSchema = new mongoose.Schema({
         default: false
     }
 
-    // { name: {mandatory}, email: {mandatory, valid email, unique},
-    //  mobile: {mandatory, valid mobile number, unique}, 
-    //  collegeId: {ObjectId, ref to college model, 
-    //     isDeleted: {boolean, default: false}}
+  
 
 }, { timestamps: true })
 
