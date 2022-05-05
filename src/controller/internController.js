@@ -16,14 +16,14 @@ const isValid = (value) => {
 const postIntern = async(req, res) => {
     try {
         let data = req.body
-        
-        let { name, mobile, email, collegeName } = data
+
+        let { name, mobile, email, collegeName, isDeleted } = data
 
         // data validation
         if (!isValidReq(data)) {
             return res.status(400).send({ status: false, message: "Please provide intern details." })
         }
-        
+
 
         // collegeName validation
         if (!isValid(collegeName)) {
@@ -34,7 +34,7 @@ const postIntern = async(req, res) => {
         }
 
         let check = await collegeModel.findOne({ name: collegeName })
-        if (!check||check.isDeleted===true) {
+        if (!check || check.isDeleted === true) {
             return res.status(404).send({ status: false, message: "This college doesn't exist." })
         }
 
@@ -45,15 +45,16 @@ const postIntern = async(req, res) => {
             name: name,
             mobile: mobile,
             email: email,
-            collegeId: id
+            collegeId: id,
+            isDeleted: isDeleted
         }
 
         // name validation
         if (!isValid(name)) {
             return res.status(400).send({ status: false, message: "Please enter intern name." })
         }
-        if(!/^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/.test(name)){
-            return res.status(400).send({status: false, message: "Please enter valid intern name." })
+        if (!/^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/.test(name)) {
+            return res.status(400).send({ status: false, message: "Please enter valid intern name." })
         }
 
 
@@ -82,13 +83,20 @@ const postIntern = async(req, res) => {
             return res.status(404).send({ status: false, message: "This email already exist." })
         }
 
+        //  delete key validation
+        if (isDeleted) {
+            if (typeof isDeleted !== "boolean") {
+                return res.status(400).send({ status: false, message: "isDeleted is boolean ,it can be either true or false. " })
+            }
+        }
+
         // create intern
         let createIntern = await internModel.create(document)
 
-       
-      
+
+
         return res.status(201)
-        .send({ status: true,data: createIntern})
+            .send({ status: true, data: createIntern })
 
     } catch (err) {
         return res.status(500).send({ status: "error", message: err.message })
