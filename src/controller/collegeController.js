@@ -41,7 +41,7 @@ const postCollege = async (req, res) => {
         if (!isValid(fullName)) {
             return res.status(400).send({ status: false, message: "Please enter  college full name. " })
         }
-        if (!/^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/.test(fullName)) {
+        if (!/^[A-Za-z,\s]{1,}[\.]{0,1}[A-Za-z,\s]{0,}$/.test(fullName)) {
             return res.status(400).send({ status: false, message: "Please enter valid full name of college." })
         }
 
@@ -115,7 +115,7 @@ const collegeDetails = async (req, res) => {
             interests: findIntern
         }
 
-        return res.status(200).send({ data: document })
+        return res.status(200).send({status:true, data: document })
 
     }
     catch (err) {
