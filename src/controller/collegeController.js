@@ -36,6 +36,7 @@ const postCollege = async (req, res) => {
         if (check) {
             return res.status(400).send({ status: false, message: "This college is already exist." })
         }
+
         //  fullName validation
         if (!isValid(fullName)) {
             return res.status(400).send({ status: false, message: "Please enter  college full name. " })

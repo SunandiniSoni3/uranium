@@ -68,7 +68,7 @@ const postIntern = async(req, res) => {
         }
         let mobileCheck = await internModel.findOne({ mobile: mobile })
         if (mobileCheck) {
-            return res.status(404).send({ status: false, message: "This mobile no. already exist." })
+            return res.status(400).send({ status: false, message: "This mobile no. already exist." })
         }
 
         // email validation
@@ -80,7 +80,7 @@ const postIntern = async(req, res) => {
         }
         let emailCheck = await internModel.findOne({ email: email })
         if (emailCheck) {
-            return res.status(404).send({ status: false, message: "This email already exist." })
+            return res.status(400).send({ status: false, message: "This email already exist." })
         }
 
         //  delete key validation
