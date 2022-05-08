@@ -1,6 +1,7 @@
 const collegeModel = require("../models/collegeModel")
 
 const internModel = require("../models/internModel")
+
 const isValidReq = function(value) {
     return Object.keys(value).length > 0
 }
@@ -13,7 +14,7 @@ const isValid = (value) => {
 }
 
 
-const postIntern = async(req, res) => {
+const postIntern = async (req, res) => {
     try {
         let data = req.body
 
@@ -26,6 +27,7 @@ const postIntern = async(req, res) => {
 
 
         // collegeName validation
+
         if (!isValid(collegeName)) {
             return res.status(400).send({ status: false, message: "Please enter college name. " })
         }
@@ -34,6 +36,7 @@ const postIntern = async(req, res) => {
         }
 
         let check = await collegeModel.findOne({ name: collegeName })
+        
         if (!check || check.isDeleted === true) {
             return res.status(404).send({ status: false, message: "This college doesn't exist." })
         }
@@ -42,9 +45,9 @@ const postIntern = async(req, res) => {
         let id = check["_id"] // collegeId
 
         let document = {
-            name: name,
-            mobile: mobile,
-            email: email,
+            name,
+            mobile,
+            email,
             collegeId: id,
             isDeleted: isDeleted
         }
@@ -66,6 +69,7 @@ const postIntern = async(req, res) => {
         if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile)) {
             return res.status(400).send({ status: false, message: "Please enter valid 10 digit mobile number. " })
         }
+        // 
         let mobileCheck = await internModel.findOne({ mobile: mobile })
         if (mobileCheck) {
             return res.status(400).send({ status: false, message: "This mobile no. already exist." })

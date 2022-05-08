@@ -7,7 +7,8 @@ const collegeSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: "Name is required",
-        unique: true
+        unique: true,
+        lowercase:true
     },
     fullName: {
         type: String,
@@ -16,7 +17,7 @@ const collegeSchema = new mongoose.Schema({
     },
     logoLink: {
         type: String,
-        required:true
+        required:"logo Link is required"
         
     },
     isDeleted: {

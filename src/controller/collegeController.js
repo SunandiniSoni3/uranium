@@ -82,7 +82,9 @@ const postCollege = async (req, res) => {
 const collegeDetails = async (req, res) => {
     try {
         let data = req.query
+
         collegeName = data.collegeName
+
         // collegeName validation
         if (!isValidReq(data) || !isValid(collegeName)) {
             return res.status(400).send({ status: false, message: "Please enter college name." })
@@ -98,11 +100,11 @@ const collegeDetails = async (req, res) => {
         }
 
         let id = check["_id"]
-        console.log(id)
+        
 
         let findIntern = await internModel.find({ collegeId: id, isDeleted: false }).select({ _id: 1, name: 1, email: 1, mobile: 1 })
 
-        // console.log(collegeId)
+    
         if (!findIntern.length) {
             return res.status(404).send({ status: false, message: "There are no interns for this college." })
 
@@ -122,6 +124,5 @@ const collegeDetails = async (req, res) => {
         return res.status(500).send({ status: "Error", message: err.message })
     }
 }
-module.exports.postCollege = postCollege
+module.exports={ postCollege,collegeDetails}
 
-module.exports.collegeDetails = collegeDetails
