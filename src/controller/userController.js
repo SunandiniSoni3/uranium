@@ -74,6 +74,12 @@ const createUser=async function (req,res){
             return res.status(400).send({ status: false, message: "Please enter valid 10 digit mobile number. " })
         }
 
+        const phoneExt=await userModel.findOne({phone:phone})
+        
+        if(phoneExt){
+            return res.status(409).send({status:false,message:"phone number already exists"})
+        }
+
         // let document ={
         //     title,
         //     name,
@@ -91,25 +97,14 @@ const createUser=async function (req,res){
 
         // }
 
-        const phoneExt=await userModel.findOne({phone:phone})
-        
-            if(phoneExt){
-                return res.status(409).send({status:false,message:"phone number already exists"})
-            }
+       
          
 
             let saveData=await userModel.create(requestBody)
+            
             return res.status(201).send({status:true,message:"success",data:saveData})
         
-        
-
-
-
-
-
-
-
-    
+          
 }
 
 
