@@ -66,10 +66,6 @@ const createUrl = async (req, res) => {
     }
 
 
-    // findOne longURl in DB
-    const findUrl = await urlModel.findOne({ longUrl: longUrl })
-   
-
     // urlcode 
     const urlCode = shortid.generate().toLowerCase();
     console.log(urlCode);
@@ -88,7 +84,8 @@ const createUrl = async (req, res) => {
     data["urlCode"] = urlCode;
 
     // create url document
-    const create = await urlModel.create(data);
+    await urlModel.create(data);
+    const create = await urlModel.findOne(data).select({longUrl:1,shortUrl:1,urlCode:1,_id:0});
     await SET_ASYNC(`${longUrl}`, JSON.stringify(create))
     return res.status(201).send({ status: true, data: create });
   }
@@ -107,7 +104,7 @@ const redirectUrl = async (req, res) => {
     const { urlCode } = req.params;
     let cahcedUrlData = await GET_ASYNC(`${urlCode}`)
     if(cahcedUrlData) {
-      return res.status(302).redirect(cahcedUrlData)
+      return res.status(302).redirect(JSON.parse(cahcedUrlData))
     }
 
 
@@ -115,6 +112,7 @@ const redirectUrl = async (req, res) => {
     if (!findUrl) {
       return res.status(404).send({ status: false, message: "Url not found" });
     }
+    await SET_ASYNC(`${urlCode}`, JSON.stringify(findUrl.longUrl))
 
     // redirecting 
     return res.status(302).redirect(findUrl.longUrl);
