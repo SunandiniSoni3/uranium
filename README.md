@@ -36,7 +36,7 @@ If you haven’t used tinyurl.com before, please try creating a new shortened UR
 { urlCode: { mandatory, unique, lowercase, trim }, longUrl: {mandatory, valid url}, shortUrl: {mandatory, unique} }
 ```
 
-### POST /url/shorten
+### POST 
 - Create a short URL for an original url recieved in the request body.
 - The baseUrl must be the application's baseUrl. Example if the originalUrl is http://abc.com/user/images/name/2 then the shortened url should be http://localhost:3000/xyz
 - Return the shortened unique url. Refer [this](#url-shorten-response) for the response
@@ -92,3 +92,5 @@ If you haven’t used tinyurl.com before, please try creating a new shortened UR
 
 ```
 
+redis-13421.c264.ap-south-1-1.ec2.cloud.redislabs.com:13421
+9q3nyOJBkIfPFVE0GIURUBK8Bushc3Gb
