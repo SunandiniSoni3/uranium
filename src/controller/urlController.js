@@ -37,10 +37,7 @@ const createUrl = async (req, res) => {
 
     // request body validation
     if (Object.keys(data).length === 0) {
-      return res.status(400).send({
-        status: false,
-        message: "Invalid parameter : 'Please enter Url'",
-      });
+      return res.status(400).send({ status: false, message: "Invalid parameter : 'Please enter Url'" });
     }
 
     let baseUrl = "http://localhost:3000";
@@ -49,46 +46,50 @@ const createUrl = async (req, res) => {
 
     const { longUrl } = data;
     if (!isValid(longUrl)) {
-      return res
-        .status(400)
-        .send({ status: false, message: "Please enter long url" });
+      return res.status(400).send({ status: false, message: "Please enter long url" });
     }
 
+    // longUrl = longUrl.trim()
     if (!validUrl.isWebUri(longUrl.trim())) {
-      return res
-        .status(400)
-        .send({ status: false, message: " please enter valid long url" });
+      return res.status(400).send({ status: false, message: " please enter valid long url" });
     }
 
     let cachedUrlData = await GET_ASYNC(`${longUrl}`);
 
     let urlData = JSON.parse(cachedUrlData);
     if (cachedUrlData) {
-      return res.status(200).send({ status: true, data: urlData });
+      return res.status(200).send({ status: true, message: "from cache", data: urlData });
     }
+
+    const checkLongUrl = await urlModel.findOne({longUrl:longUrl}).select({ longUrl: 1, shortUrl: 1, urlCode: 1, _id: 0 })
+      if(checkLongUrl){
+        return res.status(200).send({ status: true,  data: checkLongUrl});
+      }
+    
 
     // urlcode
     const urlCode = shortid.generate().toLowerCase();
 
     const checkCode = await urlModel.findOne({ urlCode: urlCode });
     if (checkCode) {
-      return res
-        .status(400)
-        .send({ status: false, message: " this url Code already exist" });
+      return res.status(400).send({ status: false, message: `${urlCode}  url Code already exist` });
     }
 
     // shortUrl creation
     const shortUrl = baseUrl + "/" + urlCode;
+    const checkShortUrl = await urlModel.findOne({ shortUrl: shortUrl });
+    if (checkShortUrl) {
+      return res.status(400).send({ status: false, message: `${shortUrl}  shorturl  already exist` });
+    }
 
+    // adding keys in data
     data["shortUrl"] = shortUrl;
     data["urlCode"] = urlCode;
 
     // create url document
     await urlModel.create(data);
 
-    const create = await urlModel
-      .findOne(data)
-      .select({ longUrl: 1, shortUrl: 1, urlCode: 1, _id: 0 });
+    const create = await urlModel.findOne(data).select({ longUrl: 1, shortUrl: 1, urlCode: 1, _id: 0 });
     await SET_ASYNC(`${longUrl}`, JSON.stringify(create));
     return res.status(201).send({ status: true, data: create });
   } catch (error) {
@@ -125,9 +126,26 @@ const redirectUrl = async (req, res) => {
 
     // redirecting
     return res.status(302).redirect(findUrl.longUrl);
-  } catch (error) {
+  }
+  catch (error) {
     res.status(500).send({ status: "error", message: "error.message" });
   }
 };
 
-module.exports = { createUrl, redirectUrl };
+
+
+// ------------------------------------to clear redis database------------------------------------------------
+
+const flushw = (req, res) => {
+  redisClient.flushall("ASYNC", (err, data) => {
+    if (err)
+      console.log(err)
+    else if (data)
+      console.log("Memory flushed: ", data)
+  })
+  res.status(200).send({ msg: "redis memery cleared" })
+}
+
+
+
+module.exports = { createUrl, redirectUrl, flushw };
