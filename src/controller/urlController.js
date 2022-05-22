@@ -1,9 +1,11 @@
 const urlModel = require("../model/urlModel");
 const validUrl = require("valid-url");
+const baseUrl = "http://localhost:3000";
 const shortid = require("shortid");
 const redis = require("redis");
-
 const { promisify } = require("util");
+
+
 
 //Connect to redis
 const redisClient = redis.createClient(
@@ -18,6 +20,7 @@ redisClient.auth("9q3nyOJBkIfPFVE0GIURUBK8Bushc3Gb", function (err) {
 redisClient.on("connect", async function () {
   console.log("Connected to Redis..");
 });
+
 
 //Connection setup for redis
 
@@ -40,17 +43,36 @@ const createUrl = async (req, res) => {
       return res.status(400).send({ status: false, message: "Invalid parameter : 'Please enter Url'" });
     }
 
-    let baseUrl = "http://localhost:3000";
+    
 
     // longUrl validation
 
-    const { longUrl } = data;
+    let { longUrl } = data;
     if (!isValid(longUrl)) {
       return res.status(400).send({ status: false, message: "Please enter long url" });
     }
 
-    // longUrl = longUrl.trim()
+     longUrl = longUrl.trim()
     if (!validUrl.isWebUri(longUrl.trim())) {
+      return res.status(400).send({ status: false, message: " please enter valid long url" });
+
+    }
+
+    if(!(longUrl.includes("//"))){
+      return res.status(400).send({ status: false, message: " please enter valid long url" });
+    }
+    const urlParts=longUrl.split("//")
+    const scheme = urlParts[0]
+    const uri =urlParts[1]
+
+    if(!(uri.includes("."))){
+      return res.status(400).send({ status: false, message: " please enter valid long url" });
+    }
+    
+    const uriParts =uri.split(".")
+
+    if(!(((scheme=="https:")||(scheme=="http:")) &&(uriParts[0].trim().length)&&(uriParts[1].trim().length)))
+    {
       return res.status(400).send({ status: false, message: " please enter valid long url" });
     }
 
@@ -77,21 +99,24 @@ const createUrl = async (req, res) => {
 
     // shortUrl creation
     const shortUrl = baseUrl + "/" + urlCode;
-    const checkShortUrl = await urlModel.findOne({ shortUrl: shortUrl });
-    if (checkShortUrl) {
-      return res.status(400).send({ status: false, message: `${shortUrl}  shorturl  already exist` });
-    }
+   
 
     // adding keys in data
     data["shortUrl"] = shortUrl;
     data["urlCode"] = urlCode;
 
     // create url document
-    await urlModel.create(data);
+   let createUrl= await urlModel.create(data);
 
-    const create = await urlModel.findOne(data).select({ longUrl: 1, shortUrl: 1, urlCode: 1, _id: 0 });
-    await SET_ASYNC(`${longUrl}`, JSON.stringify(create));
-    return res.status(201).send({ status: true, data: create });
+  
+   
+    let result ={
+      longUrl:createUrl.longUrl,
+      shortUrl:createUrl.shortUrl,
+      urlCode:createUrl.urlCode
+    }
+    await SET_ASYNC(`${longUrl}`, JSON.stringify(result));
+    return res.status(201).send({ status: true, data: result });
   } catch (error) {
     return res.status(500).send(error.message);
   }
